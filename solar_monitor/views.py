@@ -15,6 +15,9 @@ import random
 from datetime import datetime, timedelta
 import json
 
+def home(request):
+    return render(request, 'home.html')
+
 optimizer = SolarOptimizer()
 
 class SolarSystemViewSet(viewsets.ModelViewSet):
