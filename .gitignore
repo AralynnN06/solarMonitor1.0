@@ -144,6 +144,9 @@ ENV/
 env.bak/
 venv.bak/
 myenv/
+django-dashboard-kit/env
+django-dashboard-kit/.env
+django-dashboard-kit/db.sqlite3
 
 # Spyder project settings
 .spyderproject
