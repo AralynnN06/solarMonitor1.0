@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+# from decouple import config       FIXME: THIS DON'T WORK YET
+# from unipath import Path          FIXME: THIS EITHER
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Redirect behavior
 LOGIN_REDIRECT_URL = "home"           # where to go after successful login
@@ -42,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'solar_monitor',
+    'dashboard.home',
 ]
 
 MIDDLEWARE = [
@@ -56,11 +61,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "solar_project.urls"
+LOGIN_REDIRECT_URL = "home" # Route defined in dashboard/home/urls.py
+LOGOUT_REDIRECT_URL = "home"  # Route defined in dashboard/home/urls.py
+TEMPLATE_DIR = os.path.join(CORE_DIR, "dashboard/templates")  # ROOT dir for templates
+
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [TEMPLATE_DIR],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -119,8 +128,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -133,3 +142,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
 ]
 
+STATICFILES_DIRS = (
+    os.path.join(CORE_DIR, 'dashboard/static'),
+)
