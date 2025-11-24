@@ -15,6 +15,8 @@ import json
 from dashboard.models import Order
 from django.core import serializers
 
+latest_text = ""
+
 def dashboard_with_pivot(request):                                  #These are URLS for the django Dashboard!!
     return render(request, 'dashboard_with_pivot.html', {})         #
                                                                     #
@@ -22,6 +24,19 @@ def pivot_data(request):                                            #
     dataset = Order.objects.all()                                   #
     data = serializers.serialize('json', dataset)                   #
     return JsonResponse(data, safe=False)                           #
+
+def esp_data(request):
+    global latest_text
+    if request.method == "POST":
+        data = json.loads(request.body)
+        # Example: {"message": "Panel voltage is 12.3V"}
+        latest_text = data.get("text", "")
+        # Either save to DB or send to front end
+        return JsonResponse({"status": "ok"})
+    return JsonResponse({"error": "POST required"}, status = 400)
+
+def dashboard(request):
+    return render(request, "dashboard.html", {"latest_text": latest_text})
 
 # def home(request):
 #     return render(request, 'home.html')
