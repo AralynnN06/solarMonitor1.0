@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block title %} AVAA Solar Monitoring {% endblock %} 
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -16,11 +16,13 @@
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Dashboard sale</h5>
+                                <h5 class="m-b-10">Solar Monitoring Dashboard</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                <li class="breadcrumb-item">Dashboard sale</li>
+                                <li class="breadcrumb-item">Solar Monitoring Dashboard</li>
+                            <div class="col-xl-6 col-md-12">
+
                             </ul>
                         </div>
                     </div>
@@ -135,21 +137,17 @@
                                 <div class="card-body pb-0">
                                     <h2 class="m-0">1432</h2>
                                     <span class="text-primary">Order delivered</span>
-                                    <p class="mb-3 mt-3">Total number of order delivered in this month.</p>
+                                    <p class="mb-3 mt-3">Total Energy Produced This Week.</p>
                                 </div>
                                 <div class="card-footer border-0">
                                     <div class="row text-center">
                                         <div class="col">
                                             <h4 class="m-0">130</h4>
-                                            <span>May</span>
+                                            <span>Monday</span>
                                         </div>
                                         <div class="col">
                                             <h4 class="m-0">251</h4>
-                                            <span>June</span>
-                                        </div>
-                                        <div class="col">
-                                            <h4 class="m-0 ">235</h4>
-                                            <span>July</span>
+                                            <span>Tuesday</span>
                                         </div>
                                     </div>
                                 </div>
@@ -161,16 +159,16 @@
                 <div class="col-xl-6 col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Department wise monthly sales report</h5>
+                            <h5>Day-to-Day Solar Insights</h5>
                         </div>
                         <div class="card-body">
                             <div class="row pb-2">
                                 <div class="col-auto m-b-10">
                                     <h3 class="mb-1">$21,356.46</h3>
-                                    <span>Total Sales</span>
+                                    <span>Total Energy Produced This Week</span>
                                 </div>
                                 <div class="col-auto m-b-10">
-                                    <h3 class="mb-1">$1935.6</h3>
+                                    <h3 class="mb-1">26.8 kWh</h3>
                                     <span>Average</span>
                                 </div>
                             </div>
@@ -186,7 +184,8 @@
 <!--  -->
 <!--  -->
 <!--  -->
-                            <h6>ESP32 Output</h6>
+<!--  -->
+                            <h6>ESP32 Output (Live Sensor Data)</h6>
                             <p>{{ latest_text }}</p>
                             <!-- <span>It takes continuous effort to maintain high customer satisfaction levels Internal and external.</span> -->
                         </div>
@@ -286,8 +285,8 @@
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-0">
                                         <div class="col">
-                                            <h6 class="m-b-5">Total Profit</h6>
-                                            <h3 class="m-b-0">$1,783</h3>
+                                            <h6 class="m-b-5">Battery Charge Level</h6>
+                                            <h3 class="m-b-0">89%</h3>
                                         </div>
                                         <div class="col-auto">
                                             <i class="material-icons-two-tone text-primary">card_giftcard</i>
@@ -301,8 +300,8 @@
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-0">
                                         <div class="col">
-                                            <h6 class="m-b-5 text-white">Total Orders</h6>
-                                            <h3 class="m-b-0 text-white">15,830</h3>
+                                            <h6 class="m-b-5 text-white">Energy Produced Today</h6>
+                                            <h3 class="m-b-0 text-white">4.3 kWh</h3>
                                         </div>
                                         <div class="col-auto">
                                             <i class="material-icons-two-tone text-white">local_mall</i>
@@ -316,8 +315,8 @@
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-0">
                                         <div class="col">
-                                            <h6 class="m-b-5 text-white">Average Price</h6>
-                                            <h3 class="m-b-0 text-white">$6,780</h3>
+                                            <h6 class="m-b-5 text-white">Cloudiness Index</h6>
+                                            <h3 class="m-b-0 text-white">Clear sky, 1 = Overcast</h3>
                                         </div>
                                         <div class="col-auto">
                                             <i class="material-icons-two-tone text-white">monetization_on</i>
@@ -331,8 +330,8 @@
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-0">
                                         <div class="col">
-                                            <h6 class="m-b-5">Product Sold</h6>
-                                            <h3 class="m-b-0">6,784</h3>
+                                            <h6 class="m-b-5">Inverter Efficiency</h6>
+                                            <h3 class="m-b-0">95%</h3>
                                         </div>
                                         <div class="col-auto">
                                             <i class="material-icons-two-tone text-primary">local_offer</i>

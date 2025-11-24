@@ -147,6 +147,7 @@ myenv/
 django-dashboard-kit/env
 django-dashboard-kit/.env
 django-dashboard-kit/db.sqlite3
+vn1
 
 # Spyder project settings
 .spyderproject
