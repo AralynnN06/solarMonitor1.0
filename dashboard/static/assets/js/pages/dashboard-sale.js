@@ -122,23 +122,24 @@ function floatchart() {
             },
             colors: ['#7267EF', '#c7d9ff'],
             series: [{
-                name: 'Total Sales',
+                name: 'Last Year Usage',
                 type: 'column',
-                data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
+                data: [23, 11, 22, 27, 13, 22, 37]
             }, {
-                name: 'Average',
+                name: 'Today Usage',
                 type: 'line',
-                data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
+                data: [30, 25, 36, 30, 45, 35, 48]
             }],
             fill: {
                 opacity: [0.85, 1],
             },
-            labels: ['01/01/2003', '02/01/2003', '03/01/2003', '04/01/2003', '05/01/2003', '06/01/2003', '07/01/2003', '08/01/2003', '09/01/2003', '10/01/2003', '11/01/2003'],
+            labels: ['01/01/2003', '01/02/2003', '01/03/2003','01/04/2003','01/05/2003','01/06/2003','01/07/2003'],
             markers: {
                 size: 0
             },
             xaxis: {
-                type: 'datetime'
+                type: 'category',
+                "categories": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
             },
             yaxis: {
                 min: 0
@@ -149,7 +150,7 @@ function floatchart() {
                 y: {
                     formatter: function (y) {
                         if (typeof y !== "undefined") {
-                            return "$ " + y.toFixed(0);
+                            return y.toFixed(0) + " kW";
                         }
                         return y;
 
