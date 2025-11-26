@@ -48,7 +48,7 @@ function floatchart() {
                 y: {
                     title: {
                         formatter: function (seriesName) {
-                            return 'Ticket '
+                            return 'Energy Usage: '
                         }
                     }
                 },
