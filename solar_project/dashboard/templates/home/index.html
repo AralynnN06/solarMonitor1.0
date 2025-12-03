@@ -1,0 +1,261 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} AVAA Solar Monitoring {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pc-container">
+        <div class="pcoded-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">Solar Monitoring Dashboard</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                <li class="breadcrumb-item">Solar Monitoring Dashboard</li>
+                            <div class="col-xl-6 col-md-12">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <!-- support-section start -->
+                <div class="col-xl-6 col-md-12">
+                    <div class="card flat-card">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card support-bar overflow-hidden">
+                                <div class="card-body pb-0">
+                                    <h2 class="m-0">88.94%</h2>
+                                    <span class="text-primary">Efficiency Rate</span>
+                                </div>
+                                <div id="support-chart"></div>
+                                <div class="card-footer border-0 bg-primary text-white background-pattern-white">
+                                    <div class="row text-center">
+                                        <div class="col">
+                                            <h4 class="m-0 text-white">80.4 %</h4>
+                                            <span>2024</span>
+                                        </div>
+                                        <div class="col">
+                                            <h4 class="m-0 text-white">88.2%</h4>
+                                            <span>2025</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card support-bar overflow-hidden">
+                                <div class="card-body pb-0">
+                                    <h2 class="m-0">1432</h2>
+                                    <p class="mb-3 mt-3">Total Energy Used This Week.</p>
+                                </div>
+                                <div class="card-footer border-0">
+                                    <div class="row text-center">
+                                        <div class="col">
+                                            <h4 class="m-0">20 kW</h4>
+                                            <span>Monday</span>
+                                        </div>
+                                        <div class="col">
+                                            <h4 class="m-0">28 kW</h4>
+                                            <span>Tuesday</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="support-chart1"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="card prod-p-card background-pattern">
+                                <div class="card-body">
+                                    <div class="row align-items-center m-b-0">
+                                        <div class="col">
+                                            <h6 class="m-b-5">Battery Charge Level</h6>
+                                            <h3 class="m-b-0">89%</h3>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="material-icons-two-tone text-primary">card_giftcard</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="card prod-p-card bg-primary background-pattern-white">
+                                <div class="card-body">
+                                    <div class="row align-items-center m-b-0">
+                                        <div class="col">
+                                            <h4 class="m-b-5 text-white">Cloudiness Index</h4>
+                                            <h6 class="m-b-5 text-white">Clear sky, 1 = Overcast</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="col-sm-6">
+                            <div class="card prod-p-card background-pattern">
+                                <div class="card-body">
+                                    <div class="row align-items-center m-b-0">
+                                        <div class="col">
+                                            <h6 class="m-b-5">Inverter 1 Efficiency</h6>
+                                            <h3 class="m-b-0">95%</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="col-sm-6">
+                            <div class="card prod-p-card background-pattern">
+                                <div class="card-body">
+                                    <div class="row align-items-center m-b-0">
+                                        <div class="col">
+                                            <h6 class="m-b-5">Inverter 2 Efficiency</h6>
+                                            <h3 class="m-b-0">96%</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Day-to-Day Solar Insights</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row pb-2">
+                                <div class="col-auto m-b-10">
+                                    <h3 class="mb-1">176.3 kW</h3>
+                                    <span>Total Energy Produced This Week</span>
+                                </div>
+                                <div class="col-auto m-b-10">
+                                    <h3 class="mb-1">26.8 kWh</h3>
+                                    <span>Average Produced per Day</span>
+                                </div>
+                            </div>
+                            <div id="account-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- support-section end -->
+                <!-- customer-section start -->
+                <div class="col-xl-6 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+                            <h6>ESP32 Output (Live Sensor Data)</h6>
+                            <p>{{ latest_text }}</p>
+<!--  -->
+<!--  -->
+<!--  -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="chat"></div>
+
+                <input id="msg" type="text" placeholder="Ask something..." />
+                <button onclick="sendMsg()" display: block; margin: auto;style="padding:4px 10px; width:60px;">Send</button>
+                
+                <style>
+                .send-btn {
+                    padding: 4px 10px;   /* controls internal spacing */
+                    width: 60px;         /* force a fixed width */
+                    font-size: 14px;
+                }
+                </style>
+
+                <script>
+                    async function sendMsg() {
+                        const message = document.getElementById("msg").value;
+                        const chatBox = document.getElementById("chat");
+
+                        try {
+                            const response = await fetch("/chat/", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    // include this if you’re using Django CSRF protection:
+                                    "X-CSRFToken": getCookie("csrftoken"),
+                                },
+                                body: JSON.stringify({ message: message }),
+                            });
+
+                            console.log("Status:", response.status);
+
+                            if (!response.ok) {
+                                const text = await response.text();
+                                console.error("Server error:", text);
+                                chatBox.innerHTML += `<p><b>System:</b> Server error (${response.status})</p>`;
+                                return;
+                            }
+
+                            const data = await response.json();
+                            chatBox.innerHTML += `<p><b>You:</b> ${message}</p>`;
+                            chatBox.innerHTML += `<p><b>AI:</b> ${data.reply}</p>`;
+
+                        } catch (err) {
+                            console.error("Fetch error:", err);
+                        }
+                    }
+
+                    // helper for CSRF if needed (Django templates):
+                    function getCookie(name) {
+                        let cookieValue = null;
+                        if (document.cookie && document.cookie !== "") {
+                            const cookies = document.cookie.split(";");
+                            for (let cookie of cookies) {
+                                cookie = cookie.trim();
+                                if (cookie.startsWith(name + "=")) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+                </script>
+            <!-- customer-section end -->
+            </div>
+            <!-- [ Main Content ] end -->
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script src="/static/assets/js/plugins/apexcharts.min.js"></script>
+    <script src="/static/assets/js/pages/dashboard-sale.js"></script>
+
+{% endblock javascripts %}
