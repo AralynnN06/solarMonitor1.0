@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'rest_framework',
     'corsheaders',
-    'solar_monitor',
+    # 'solar_monitor',
     'dashboard.home',
 ]
 
