@@ -167,6 +167,30 @@
 <!--  -->
                             <h6>ESP32 Output (Live Sensor Data)</h6>
                             <p>{{ latest_text }}</p>
+                            <div>
+                                <h3>ESP32 Status: <span id="status">Checking...</span></h3>
+                                <pre id="payload">{}</pre>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="ingest.html">ESP32 Ingest (From ESP32 to Webapp)</a></li>
+                            </ul>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="latest.html">I Guess temporary data</a></li>
+                            </ul>
+                            <script>
+                            async function refresh() {
+                                const res = await fetch("/api/esp/latest/");
+                                const data = await res.json();
+
+                            document.getElementById("status").textContent =
+                                data.connected ? `Connected (Last seen: ${data.last_seen})` : "Not connected";
+
+                            document.getElementById("payload").textContent =
+                                JSON.stringify(data.payload, null, 2);
+                            }
+                            setInterval(refresh, 1000);
+                            refresh();
+                            </script>
 <!--  -->
 <!--  -->
 <!--  -->

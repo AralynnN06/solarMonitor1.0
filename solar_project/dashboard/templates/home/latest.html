@@ -1,0 +1,63 @@
+<div class="pc-container">
+        <div class="pcoded-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">Home of ESP32 latest Data</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <div class="col-xl-6 col-md-12">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <!-- [ Main Content ] start -->
+            
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+                            <h3>ESP32 Output (Live Sensor Data)</h3>
+                            <p>{{ latest_text }}</p>
+                            <div>
+                                <h3>ESP32 Status: <span id="status">Checking...</span></h3>
+                                <pre id="payload">{}</pre>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="ingest.html">Home</a></li>
+                                <li class="breadcrumb-item">Solar Monitoring Dashboard</li>
+                            </ul>
+                            <script>
+                            async function refresh() {
+                                const res = await fetch("/api/esp/latest/");
+                                const data = await res.json();
+
+                            document.getElementById("status").textContent =
+                                data.connected ? `Connected (Last seen: ${data.last_seen})` : "Not connected";
+
+                            document.getElementById("payload").textContent =
+                                JSON.stringify(data.payload, null, 2);
+                            }
+                            setInterval(refresh, 1000);
+                            refresh();
+                            </script>
+<!--  -->
+<!--  -->
+<!--  -->
+                        </div>
+                    </div>
+                </div>
+
+                
+            <!-- customer-section end -->
+            </div>
+            <!-- [ Main Content ] end -->
+        </div>
+    </div>

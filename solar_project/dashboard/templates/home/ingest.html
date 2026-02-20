@@ -1,0 +1,131 @@
+<div class="pc-container">
+        <div class="pcoded-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">Home of ESP32 temp Data</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <div class="col-xl-6 col-md-12">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <!-- [ Main Content ] start -->
+            
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+                            <h6>ESP32 Output (Live Sensor Data)</h6>
+                            <p>{{ latest_text }}</p>
+                            <div>
+                                <h3>ESP32 Status: <span id="status">Checking...</span></h3>
+                                <pre id="payload">{}</pre>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="ingest.html">Home</a></li>
+                                <li class="breadcrumb-item">Solar Monitoring Dashboard</li>
+                            </ul>
+                            <script>
+                            async function refresh() {
+                                const res = await fetch("/api/esp/latest/");
+                                const data = await res.json();
+
+                            document.getElementById("status").textContent =
+                                data.connected ? `Connected (Last seen: ${data.last_seen})` : "Not connected";
+
+                            document.getElementById("payload").textContent =
+                                JSON.stringify(data.payload, null, 2);
+                            }
+                            setInterval(refresh, 1000);
+                            refresh();
+                            </script>
+<!--  -->
+<!--  -->
+<!--  -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="chat"></div>
+
+                <input id="msg" type="text" placeholder="Ask something..." />
+                <button onclick="sendMsg()" display: block; margin: auto;style="padding:4px 10px; width:60px;">Send</button>
+                
+                <style>
+                .send-btn {
+                    padding: 4px 10px;   /* controls internal spacing */
+                    width: 60px;         /* force a fixed width */
+                    font-size: 14px;
+                }
+                </style>
+
+                <script>
+                    async function sendMsg() {
+                        const message = document.getElementById("msg").value;
+                        const chatBox = document.getElementById("chat");
+
+                        try {
+                            const response = await fetch("/chat/", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    // include this if you’re using Django CSRF protection:
+                                    "X-CSRFToken": getCookie("csrftoken"),
+                                },
+                                body: JSON.stringify({ message: message }),
+                            });
+
+                            console.log("Status:", response.status);
+
+                            if (!response.ok) {
+                                const text = await response.text();
+                                console.error("Server error:", text);
+                                chatBox.innerHTML += `<p><b>System:</b> Server error (${response.status})</p>`;
+                                return;
+                            }
+
+                            const data = await response.json();
+                            chatBox.innerHTML += `<p><b>You:</b> ${message}</p>`;
+                            chatBox.innerHTML += `<p><b>AI:</b> ${data.reply}</p>`;
+
+                        } catch (err) {
+                            console.error("Fetch error:", err);
+                        }
+                    }
+
+                    // helper for CSRF if needed (Django templates):
+                    function getCookie(name) {
+                        let cookieValue = null;
+                        if (document.cookie && document.cookie !== "") {
+                            const cookies = document.cookie.split(";");
+                            for (let cookie of cookies) {
+                                cookie = cookie.trim();
+                                if (cookie.startsWith(name + "=")) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+                </script>
+            <!-- customer-section end -->
+            </div>
+            <!-- [ Main Content ] end -->
+        </div>
+    </div>
