@@ -9,7 +9,7 @@ def connect_db():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="YOUR_PASSWORD",
+        password="admin124424$",
         database="solar_data"
     )
 
