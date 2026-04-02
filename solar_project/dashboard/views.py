@@ -9,6 +9,7 @@ from rest_framework.response import Response
 # from .models import SolarSystem, SolarReading, WeatherData, OptimizationInsight
 # from .serializers import SolarSystemSerializer, SolarReadingSerializer, WeatherDataSerializer
 from .ai_analyzer import SolarOptimizer
+from .models import MetricReading
 from django.utils import timezone
 import random
 from datetime import datetime, timedelta
@@ -16,6 +17,7 @@ import json
 from dashboard.models import Order
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
+from .esp_state import LATEST
 
 def dashboard_with_pivot(request):                                  #These are URLS for the django Dashboard!!
     return render(request, 'dashboard_with_pivot.html', {})         #
@@ -24,31 +26,6 @@ def pivot_data(request):                                            #
     dataset = Order.objects.all()                                   #
     data = serializers.serialize('json', dataset)                   #
     return JsonResponse(data, safe=False)                           #
-
-@csrf_exempt                    # use token auth later;
-def esp_ingest(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "POST only"}, status=405)
-
-    try:
-        payload = json.loads(request.body.decode("utf-8"))
-    except Exception:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
-
-    # Example expected fields
-    voltage = payload.get("voltage")
-    current = payload.get("current")
-    power   = payload.get("power")
-
-    # TODO: store in DB (MetricReading model)
-    print("ESP32:", payload)
-
-    return JsonResponse({"status": "ok"})
-
-
-##############################################################################################################################
-
-LATEST = {"last_seen": None, "payload": None}
 
 @csrf_exempt
 def esp_ingest(request):
@@ -63,15 +40,30 @@ def esp_ingest(request):
     LATEST["last_seen"] = timezone.now().isoformat()
     LATEST["payload"] = payload
 
+    MetricReading.objects.create(
+        source_ip=request.META.get("REMOTE_ADDR"),
+        voltage=payload.get("voltage"),
+        current=payload.get("current"),
+        power=payload.get("power"),
+        payload=payload,
+    )
+
     print("✅ ESP32 POST received:", payload)
     return JsonResponse({"status": "ok", "received": True})
 
 def esp_latest(request):
-    # used by dashboard polling
+    latest = MetricReading.objects.first()
+    if latest is None:
+        return JsonResponse({
+            "last_seen": None,
+            "payload": None,
+            "connected": False,
+        })
+
     return JsonResponse({
-        "last_seen": LATEST["last_seen"],
-        "payload": LATEST["payload"],
-        "connected": LATEST["last_seen"] is not None
+        "last_seen": latest.created_at.isoformat(),
+        "payload": latest.payload,
+        "connected": True,
     })
 
 

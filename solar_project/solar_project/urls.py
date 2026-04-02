@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
+    path('', include('dashboard.urls')),
     path('', include('dashboard.authentication.urls')),    # Routes for login/ register
     path('', include('dashboard.home.urls')),               # UI HTML files
     

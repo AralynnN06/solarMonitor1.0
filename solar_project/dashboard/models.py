@@ -44,3 +44,15 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=50)
     shipping_cost = models.CharField(max_length=50)
     unit_price = models.DecimalField(max_digits=5, decimal_places=2)
+
+
+class MetricReading(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    source_ip = models.GenericIPAddressField(null=True, blank=True)
+    voltage = models.FloatField(null=True, blank=True)
+    current = models.FloatField(null=True, blank=True)
+    power = models.FloatField(null=True, blank=True)
+    payload = models.JSONField(default=dict)
+
+    class Meta:
+        ordering = ["-created_at"]
