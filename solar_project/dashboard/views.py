@@ -13,7 +13,7 @@ from django.utils import timezone
 import random
 from datetime import datetime, timedelta
 import json
-from dashboard.models import Order
+from dashboard.models import Order, MetricReading, SolarSensor
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 
@@ -25,31 +25,6 @@ def pivot_data(request):                                            #
     data = serializers.serialize('json', dataset)                   #
     return JsonResponse(data, safe=False)                           #
 
-@csrf_exempt                    # use token auth later;
-def esp_ingest(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "POST only"}, status=405)
-
-    try:
-        payload = json.loads(request.body.decode("utf-8"))
-    except Exception:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
-
-    # Example expected fields
-    voltage = payload.get("voltage")
-    current = payload.get("current")
-    power   = payload.get("power")
-
-    # TODO: store in DB (MetricReading model)
-    print("ESP32:", payload)
-
-    return JsonResponse({"status": "ok"})
-
-
-##############################################################################################################################
-
-LATEST = {"last_seen": None, "payload": None}
-
 @csrf_exempt
 def esp_ingest(request):
     if request.method != "POST":
@@ -60,18 +35,50 @@ def esp_ingest(request):
     except Exception:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
 
-    LATEST["last_seen"] = timezone.now().isoformat()
-    LATEST["payload"] = payload
+    voltage = payload.get("voltage")
+    current = payload.get("current")
+    power = payload.get("power")
 
-    print("✅ ESP32 POST received:", payload)
+    sensor_id = payload.get("sensor_id")
+    sensor = None
+    if sensor_id is not None:
+        try:
+            sensor = SolarSensor.objects.get(id=sensor_id)
+        except SolarSensor.DoesNotExist:
+            sensor = None
+
+    if sensor is None:
+        sensor = SolarSensor.objects.first()
+    if sensor is None:
+        return JsonResponse({"error": "No sensors configured"}, status=400)
+
+    MetricReading.objects.create(
+        user=sensor.user,
+        sensor=sensor,
+        timestamp=timezone.now(),
+        source_ip=request.META.get("REMOTE_ADDR"),
+        voltage=voltage,
+        current=current,
+        power=power,
+        payload=payload,
+    )
+
     return JsonResponse({"status": "ok", "received": True})
 
 def esp_latest(request):
-    # used by dashboard polling
+    sensor_id = request.GET.get("sensor_id")
+    qs = MetricReading.objects.all()
+    if sensor_id:
+        qs = qs.filter(sensor_id=sensor_id)
+
+    latest = qs.first()
+    if latest is None:
+        return JsonResponse({"last_seen": None, "payload": None, "connected": False})
+
     return JsonResponse({
-        "last_seen": LATEST["last_seen"],
-        "payload": LATEST["payload"],
-        "connected": LATEST["last_seen"] is not None
+        "last_seen": latest.timestamp.isoformat(),
+        "payload": latest.payload,
+        "connected": True,
     })
 
 

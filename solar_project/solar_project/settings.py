@@ -31,7 +31,11 @@ SECRET_KEY = "django-insecure-&sf-w&_q#)i@#&6k*kiq-gz%f-qc3^nmv1)fu_ryr-%*n5+kp-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "192.168.1.2",
+    "localhost",
+    "127.0.0.1"
+]
 
 
 # Application definition
@@ -46,6 +50,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     # 'solar_monitor',
+    'dashboard',
+    'dashboard.authentication',
     'dashboard.home',
 ]
 
@@ -76,6 +82,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "dashboard.context_processors.seeded_status",
             ],
         },
     },

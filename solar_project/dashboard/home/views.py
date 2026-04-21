@@ -4,10 +4,29 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 
+from dashboard.models import SolarSensor
+
 
 @login_required(login_url="/login/")
 def index(request):
-    context = {'segment': 'index'}
+    if SolarSensor.objects.filter(user=request.user).count() < 2:
+        SolarSensor.objects.get_or_create(
+            user=request.user,
+            name="ESP32 Sensor 1",
+            defaults={"location": "Unknown", "sensor_type": "ESP32"},
+        )
+        SolarSensor.objects.get_or_create(
+            user=request.user,
+            name="ESP32 Sensor 2",
+            defaults={"location": "Unknown", "sensor_type": "ESP32"},
+        )
+
+    sensors = list(
+        SolarSensor.objects.filter(user=request.user)
+        .order_by('id')
+        .values('id', 'name')
+    )
+    context = {'segment': 'index', 'sensors': sensors}
 
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))

@@ -167,29 +167,52 @@
 <!--  -->
                             <h6>ESP32 Output (Live Sensor Data)</h6>
                             <p>{{ latest_text }}</p>
-                            <div>
-                                <h3>ESP32 Status: <span id="status">Checking...</span></h3>
-                                <pre id="payload">{}</pre>
-                            </div>
-                            <ul class="breadcrumb">
+                            <div class="col-12 col-md-6 mb-3" id="sensor-panels"></div>
+                            <!-- <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="ingest.html">ESP32 Ingest (From ESP32 to Webapp)</a></li>
                             </ul>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="latest.html">I Guess temporary data</a></li>
-                            </ul>
+                            </ul> -->
                             <script>
-                            async function refresh() {
-                                const res = await fetch("/api/esp/latest/");
-                                const data = await res.json();
+                            const sensors = {{ sensors|safe }};
 
-                            document.getElementById("status").textContent =
-                                data.connected ? `Connected (Last seen: ${data.last_seen})` : "Not connected";
-
-                            document.getElementById("payload").textContent =
-                                JSON.stringify(data.payload, null, 2);
+                            function renderPanels() {
+                                const container = document.getElementById("sensor-panels");
+                                container.innerHTML = sensors.map(s => `
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${s.name}</h5>
+                                                <div>
+                                                    <h6>Status: <span id="status-${s.id}">Checking...</span></h6>
+                                                    <pre id="payload-${s.id}">{}</pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join("");
                             }
-                            setInterval(refresh, 1000);
-                            refresh();
+
+                            async function refreshOne(sensorId) {
+                                const res = await fetch(`/api/esp/latest/?sensor_id=${sensorId}`);
+                                const data = await res.json();
+                                const statusEl = document.getElementById(`status-${sensorId}`);
+                                const payloadEl = document.getElementById(`payload-${sensorId}`);
+                                if (!statusEl || !payloadEl) return;
+                                statusEl.textContent = data.connected ? `Connected (Last seen: ${data.last_seen})` : "Not connected";
+                                payloadEl.textContent = JSON.stringify(data.payload, null, 2);
+                            }
+
+                            async function refreshAll() {
+                                for (const s of sensors) {
+                                    await refreshOne(s.id);
+                                }
+                            }
+
+                            renderPanels();
+                            setInterval(refreshAll, 1000);
+                            refreshAll();
                             </script>
 <!--  -->
 <!--  -->

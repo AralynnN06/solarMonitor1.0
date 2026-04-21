@@ -1,17 +1,18 @@
 
-from solar_data import insert_raw_with_timestamp
-
 import math
 from datetime import datetime, timedelta
 import random
 
-def fabricate_two_weeks():
+def fabricate_two_weeks(now=None):
+    if now is None:
+        now = datetime.now()
 
-    start_time = datetime.now() - timedelta(days=14)
+    start_time = now - timedelta(days=14)
     interval = timedelta(minutes=5)
     current_time = start_time
+    readings = []
 
-    while current_time <= datetime.now():
+    while current_time <= now:
 
         hour = current_time.hour
 
@@ -28,6 +29,7 @@ def fabricate_two_weeks():
         load_voltage = 120.0
         load_current = load_power / load_voltage
 
+<<<<<<< HEAD
         # --- BATTERY STATE ---
         # Battery charges when solar is producing, discharges when not
         # Voltage is slightly higher during charging, lower during discharging
@@ -90,10 +92,21 @@ def fabricate_two_weeks():
             timestamp=current_time,
             source="simulated"
         )
+=======
+        readings.append({
+            "timestamp": current_time,
+            "voltage": solar_voltage,
+            "current": solar_current,
+            "power": solar_power,
+            "source": "simulated",
+        })
+>>>>>>> e257ac7 (ummmmm idk what happened here. i think i updated the firmware to allow multiple sensor node ESP's to be flashed, and send readings to the main hub ESP.)
 
         current_time += interval
 
+    return readings
+
 
 if __name__ == "__main__":
-    fabricate_two_weeks()
-    print("2 weeks of simulated data inserted.")
+    data = fabricate_two_weeks()
+    print(f"Generated {len(data)} simulated readings.")
