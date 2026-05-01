@@ -4,22 +4,8 @@ from dashboard.models import MetricReading, SolarSensor
 
 from .simulated import fabricate_two_weeks
 
-
-<<<<<<< HEAD
-# ------------------------
-# DATABASE CONNECTION
-# ------------------------
-def connect_db():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="admin124424$",
-        database="solar_data"
-    )
-=======
 def seed_two_weeks_for_sensor(sensor: SolarSensor) -> int:
     readings = fabricate_two_weeks(now=timezone.now().replace(tzinfo=None))
->>>>>>> e257ac7 (ummmmm idk what happened here. i think i updated the firmware to allow multiple sensor node ESP's to be flashed, and send readings to the main hub ESP.)
 
     objs = []
     for item in readings:
