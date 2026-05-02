@@ -44,17 +44,32 @@ def esp_ingest(request):
     power = payload.get("power")
 
     sensor_id = payload.get("sensor_id")
-    sensor = None
-    if sensor_id is not None:
-        try:
-            sensor = SolarSensor.objects.get(id=sensor_id)
-        except SolarSensor.DoesNotExist:
-            sensor = None
+    if sensor_id is None:
+        return JsonResponse({"error": "sensor_id is required"}, status=400)
+
+    try:
+        external_id = int(sensor_id)
+    except Exception:
+        return JsonResponse({"error": "sensor_id must be an integer"}, status=400)
+
+    sensor = SolarSensor.objects.filter(external_id=external_id).order_by("id").first()
+    if sensor is None:
+        sensor = SolarSensor.objects.filter(id=external_id).order_by("id").first()
+        if sensor is not None and sensor.external_id is None:
+            sensor.external_id = external_id
+            sensor.save(update_fields=["external_id"])
 
     if sensor is None:
-        sensor = SolarSensor.objects.first()
+        fallback = SolarSensor.objects.order_by("id").first()
+        if fallback is not None:
+            sensor, _created = SolarSensor.objects.get_or_create(
+                user=fallback.user,
+                external_id=external_id,
+                defaults={"name": f"Node {external_id}", "location": "Unknown", "sensor_type": "ESP32"},
+            )
+
     if sensor is None:
-        return JsonResponse({"error": "No sensors configured"}, status=400)
+        return JsonResponse({"error": f"Unknown sensor_id {external_id}"}, status=400)
 
     MetricReading.objects.create(
         user=sensor.user,
@@ -73,7 +88,7 @@ def esp_latest(request):
     sensor_id = request.GET.get("sensor_id")
     qs = MetricReading.objects.all()
     if sensor_id:
-        qs = qs.filter(sensor_id=sensor_id)
+        qs = qs.filter(sensor__external_id=sensor_id)
 
     latest = qs.first()
     if latest is None:
@@ -88,10 +103,16 @@ def esp_latest(request):
 
 @login_required
 def esp_sensors(request):
+    for external_id in (1, 2, 3):
+        SolarSensor.objects.get_or_create(
+            user=request.user,
+            external_id=external_id,
+            defaults={"name": f"Node {external_id}", "location": "Unknown", "sensor_type": "ESP32"},
+        )
     sensors = list(
         SolarSensor.objects.filter(user=request.user)
         .order_by("id")
-        .values("id", "name", "location", "sensor_type")
+        .values("id", "external_id", "name", "location", "sensor_type")
     )
     return JsonResponse({"sensors": sensors})
 
@@ -114,7 +135,7 @@ def esp_series(request):
     if sensor_id is None:
         sensor = sensors_qs.first()
     else:
-        sensor = get_object_or_404(sensors_qs, id=sensor_id)
+        sensor = get_object_or_404(sensors_qs, external_id=sensor_id)
 
     qs = (
         MetricReading.objects.filter(user=request.user, sensor=sensor)

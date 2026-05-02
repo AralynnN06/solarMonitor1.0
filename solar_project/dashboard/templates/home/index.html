@@ -216,11 +216,11 @@
                                 `).join("");
                             }
 
-                            async function refreshOne(sensorId) {
-                                const res = await fetch(`/api/esp/latest/?sensor_id=${sensorId}`);
+                            async function refreshOne(sensorExternalId) {
+                                const res = await fetch(`/api/esp/latest/?sensor_id=${sensorExternalId}`);
                                 const data = await res.json();
-                                const statusEl = document.getElementById(`status-${sensorId}`);
-                                const payloadEl = document.getElementById(`payload-${sensorId}`);
+                                const statusEl = document.getElementById(`status-${sensorExternalId}`);
+                                const payloadEl = document.getElementById(`payload-${sensorExternalId}`);
                                 if (!statusEl || !payloadEl) return;
                                 statusEl.textContent = data.connected ? `Connected (Last seen: ${data.last_seen})` : "Not connected";
                                 payloadEl.textContent = JSON.stringify(data.payload, null, 2);
@@ -228,7 +228,9 @@
 
                             async function refreshAll() {
                                 for (const s of sensors) {
-                                    await refreshOne(s.id);
+                                    if (s.external_id !== null && s.external_id !== undefined) {
+                                        await refreshOne(s.external_id);
+                                    }
                                 }
                             }
 

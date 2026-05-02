@@ -3,6 +3,7 @@ setTimeout(function () {
     (function () {
         var sensorSelect = document.querySelector('#sensor-select');
         var currentSensorId = null;
+        var sensorByExternalId = {};
 
         function toSeries(readings, key) {
             return readings
@@ -14,6 +15,37 @@ setTimeout(function () {
 
         var voltageChart = null;
         var currentPowerChart = null;
+
+        function sensorLabel() {
+            if (!currentSensorId) {
+                return '';
+            }
+            var s = sensorByExternalId[String(currentSensorId)];
+            if (!s) {
+                return '';
+            }
+            var parts = [];
+            if (s.name) {
+                parts.push(s.name);
+            }
+            if (s.location) {
+                parts.push(s.location);
+            }
+            return parts.join(' — ');
+        }
+
+        function updateTitles() {
+            var label = sensorLabel();
+            var voltageTitle = label ? ('Voltage (Recent) — ' + label) : 'Voltage (Recent)';
+            var cpTitle = label ? ('Current + Power (Recent) — ' + label) : 'Current + Power (Recent)';
+
+            if (voltageChart) {
+                voltageChart.updateOptions({ title: { text: voltageTitle } }, false, true);
+            }
+            if (currentPowerChart) {
+                currentPowerChart.updateOptions({ title: { text: cpTitle } }, false, true);
+            }
+        }
 
         function initCharts() {
             var options = {
@@ -37,7 +69,7 @@ setTimeout(function () {
                     data: []
                 }],
                 title: {
-                    text: 'Voltage',
+                    text: 'Voltage (Recent)',
                     align: 'left'
                 },
                 xaxis: {
@@ -67,6 +99,10 @@ setTimeout(function () {
                     name: 'Power (W)',
                     data: []
                 }],
+                title: {
+                    text: 'Current + Power (Recent)',
+                    align: 'left'
+                },
                 xaxis: {
                     type: 'datetime',
                 }
@@ -82,16 +118,23 @@ setTimeout(function () {
                 .then(function (data) {
                     var sensors = (data && data.sensors) ? data.sensors : [];
                     sensorSelect.innerHTML = '';
+                    sensorByExternalId = {};
                     sensors.forEach(function (s) {
+                        if (s.external_id === null || s.external_id === undefined) {
+                            return;
+                        }
+                        sensorByExternalId[String(s.external_id)] = s;
                         var opt = document.createElement('option');
-                        opt.value = String(s.id);
+                        opt.value = String(s.external_id);
                         opt.textContent = s.name + (s.location ? (' — ' + s.location) : '');
                         sensorSelect.appendChild(opt);
                     });
-                    if (sensors.length > 0) {
-                        currentSensorId = String(sensors[0].id);
+                    var first = sensors.find(function (s) { return s.external_id !== null && s.external_id !== undefined; });
+                    if (first) {
+                        currentSensorId = String(first.external_id);
                         sensorSelect.value = currentSensorId;
                     }
+                    updateTitles();
                 });
         }
 
@@ -105,12 +148,17 @@ setTimeout(function () {
                 .then(function (data) {
                     var readings = (data && data.readings) ? data.readings : [];
                     if (voltageChart) {
-                        voltageChart.updateSeries([{ name: 'Voltage', data: toSeries(readings, 'voltage') }], true);
+                        var label = sensorLabel();
+                        var name = label ? ('Voltage — ' + label) : 'Voltage';
+                        voltageChart.updateSeries([{ name: name, data: toSeries(readings, 'voltage') }], true);
                     }
                     if (currentPowerChart) {
+                        var label2 = sensorLabel();
+                        var cName = label2 ? ('Current (A) — ' + label2) : 'Current (A)';
+                        var pName = label2 ? ('Power (W) — ' + label2) : 'Power (W)';
                         currentPowerChart.updateSeries([
-                            { name: 'Current (A)', data: toSeries(readings, 'current') },
-                            { name: 'Power (W)', data: toSeries(readings, 'power') },
+                            { name: cName, data: toSeries(readings, 'current') },
+                            { name: pName, data: toSeries(readings, 'power') },
                         ], true);
                     }
                 })
@@ -119,6 +167,7 @@ setTimeout(function () {
 
         sensorSelect.addEventListener('change', function (e) {
             currentSensorId = e.target.value;
+            updateTitles();
             refresh();
         });
 

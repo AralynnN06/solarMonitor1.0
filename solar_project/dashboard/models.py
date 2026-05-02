@@ -53,12 +53,13 @@ class UserProfile(models.Model):
 
 class SolarSensor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="solar_sensors")
+    external_id = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=120)
     location = models.CharField(max_length=120)
     sensor_type = models.CharField(max_length=40)
 
     class Meta:
-        unique_together = ("user", "name")
+        unique_together = ("user", "name"), ("user", "external_id")
 
 
 class MetricReading(models.Model):
