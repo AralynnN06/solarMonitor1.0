@@ -1,85 +1,132 @@
 'use strict';
 setTimeout(function () {
     (function () {
-        var options = {
-            chart: {
-                height: 300,
-                type: 'line',
-                zoom: {
-                    enabled: false
+        var sensorSelect = document.querySelector('#sensor-select');
+        var currentSensorId = null;
+
+        function toSeries(readings, key) {
+            return readings
+                .filter(function (r) { return r[key] !== null && r[key] !== undefined; })
+                .map(function (r) {
+                    return { x: r.timestamp, y: Number(r[key]) };
+                });
+        }
+
+        var voltageChart = null;
+        var currentPowerChart = null;
+
+        function initCharts() {
+            var options = {
+                chart: {
+                    height: 300,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                    }
+                },
+                dataLabels: {
+                    enabled: false,
+                    width: 2,
+                },
+                stroke: {
+                    curve: 'straight',
+                },
+                colors: ["#7267EF"],
+                series: [{
+                    name: "Voltage",
+                    data: []
+                }],
+                title: {
+                    text: 'Voltage',
+                    align: 'left'
+                },
+                xaxis: {
+                    type: 'datetime',
                 }
-            },
-            dataLabels: {
-                enabled: false,
-                width: 2,
-            },
-            stroke: {
-                curve: 'straight',
-            },
-            colors: ["#7267EF"],
-            series: [{
-                name: "Desktops",
-                data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-            }],
-            title: {
-                text: 'Product Trends by Month',
-                align: 'left'
-            },
-            grid: {
-                row: {
-                    colors: ['#f3f6ff', 'transparent'], // takes an array which will be repeated on columns
-                    opacity: 0.5
+            };
+
+            voltageChart = new ApexCharts(document.querySelector('#line-chart-1'), options);
+            voltageChart.render();
+
+            var cpOptions = {
+                chart: {
+                    height: 350,
+                    type: 'area',
                 },
-            },
-            xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-            }
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                colors: ["#0e9e4a", "#ffa21d"],
+                series: [{
+                    name: 'Current (A)',
+                    data: []
+                }, {
+                    name: 'Power (W)',
+                    data: []
+                }],
+                xaxis: {
+                    type: 'datetime',
+                }
+            };
+
+            currentPowerChart = new ApexCharts(document.querySelector('#area-chart-1'), cpOptions);
+            currentPowerChart.render();
         }
 
-        var chart = new ApexCharts(
-            document.querySelector("#line-chart-1"),
-            options
-        );
-        chart.render();
-    })();
-    (function () {
-        var options = {
-            chart: {
-                height: 350,
-                type: 'area',
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth'
-            },
-            colors: ["#ffa21d", "#EA4D4D"],
-            series: [{
-                name: 'series1',
-                data: [31, 40, 28, 51, 42, 109, 100]
-            }, {
-                name: 'series2',
-                data: [11, 32, 45, 32, 34, 52, 41]
-            }],
-
-            xaxis: {
-                type: 'datetime',
-                categories: ["2018-09-19T00:00:00", "2018-09-19T01:30:00", "2018-09-19T02:30:00", "2018-09-19T03:30:00", "2018-09-19T04:30:00", "2018-09-19T05:30:00", "2018-09-19T06:30:00"],
-            },
-            tooltip: {
-                x: {
-                    format: 'dd/MM/yy HH:mm'
-                },
-            }
+        function loadSensors() {
+            return fetch('/api/esp/sensors/', { credentials: 'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var sensors = (data && data.sensors) ? data.sensors : [];
+                    sensorSelect.innerHTML = '';
+                    sensors.forEach(function (s) {
+                        var opt = document.createElement('option');
+                        opt.value = String(s.id);
+                        opt.textContent = s.name + (s.location ? (' — ' + s.location) : '');
+                        sensorSelect.appendChild(opt);
+                    });
+                    if (sensors.length > 0) {
+                        currentSensorId = String(sensors[0].id);
+                        sensorSelect.value = currentSensorId;
+                    }
+                });
         }
 
-        var chart = new ApexCharts(
-            document.querySelector("#area-chart-1"),
-            options
-        );
+        function refresh() {
+            if (!currentSensorId) {
+                return;
+            }
+            var url = '/api/esp/series/?sensor_id=' + encodeURIComponent(currentSensorId) + '&points=200';
+            fetch(url, { credentials: 'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var readings = (data && data.readings) ? data.readings : [];
+                    if (voltageChart) {
+                        voltageChart.updateSeries([{ name: 'Voltage', data: toSeries(readings, 'voltage') }], true);
+                    }
+                    if (currentPowerChart) {
+                        currentPowerChart.updateSeries([
+                            { name: 'Current (A)', data: toSeries(readings, 'current') },
+                            { name: 'Power (W)', data: toSeries(readings, 'power') },
+                        ], true);
+                    }
+                })
+                .catch(function () { });
+        }
 
-        chart.render();
+        sensorSelect.addEventListener('change', function (e) {
+            currentSensorId = e.target.value;
+            refresh();
+        });
+
+        initCharts();
+        loadSensors().then(function () {
+            refresh();
+            setInterval(refresh, 5000);
+        });
     })();
     (function () {
         var options = {

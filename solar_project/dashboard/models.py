@@ -73,3 +73,14 @@ class MetricReading(models.Model):
 
     class Meta:
         ordering = ["-timestamp"]
+
+
+class UtilityProvider(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    use_eia = models.BooleanField(default=True)
+    eia_state = models.CharField(max_length=2, blank=True, default="")
+    manual_rate_usd_per_kwh = models.FloatField(null=True, blank=True)
+    rate_source_url = models.URLField(blank=True, default="")
+
+    class Meta:
+        ordering = ["name"]

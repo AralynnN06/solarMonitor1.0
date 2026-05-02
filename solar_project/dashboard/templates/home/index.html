@@ -36,7 +36,7 @@
                     <div class="card flat-card">
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <div class="card support-bar overflow-hidden">
                                 <div class="card-body pb-0">
                                     <h2 class="m-0">88.94%</h2>
@@ -56,8 +56,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
+                        </div> -->
+                        <!-- <div class="col-md-6">
                             <div class="card support-bar overflow-hidden">
                                 <div class="card-body pb-0">
                                     <h2 class="m-0">1432</h2>
@@ -77,9 +77,9 @@
                                 </div>
                                 <div id="support-chart1"></div>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="col-sm-6">
+                        <!-- <div class="col-sm-6">
                             <div class="card prod-p-card background-pattern">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-0">
@@ -93,9 +93,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         
-                        <div class="col-sm-6">
+                        <!-- <div class="col-sm-6">
                             <div class="card prod-p-card bg-primary background-pattern-white">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-0">
@@ -119,9 +119,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
-                         <div class="col-sm-6">
+                        <!-- <div class="col-sm-6">
                             <div class="card prod-p-card background-pattern">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-0">
@@ -132,7 +132,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
                 </div>
@@ -142,13 +142,35 @@
                             <h5>Day-to-Day Solar Insights</h5>
                         </div>
                         <div class="card-body">
+                            <div class="mb-3">
+                                <a class="btn btn-primary" href="/chart-apex.html">Open Live Charts</a>
+                            </div>
                             <div class="row pb-2">
                                 <div class="col-auto m-b-10">
-                                    <h3 class="mb-1">176.3 kW</h3>
+                                    <h6 class="mb-1">Utility Rate</h6>
+                                    <select id="utility-state" class="form-select" style="max-width: 160px;"></select>
+                                    <select id="utility-custom" class="form-select mt-2" style="max-width: 320px; display:none;"></select>
+                                    <div class="mt-2" id="utility-custom-form" style="display:none;">
+                                        <input id="utility-custom-name" class="form-control mb-2" placeholder="Utility name" />
+                                        <input id="utility-custom-rate" class="form-control mb-2" placeholder="Rate ($/kWh)" />
+                                        <input id="utility-custom-url" class="form-control mb-2" placeholder="Rate source URL (optional)" />
+                                        <button id="utility-custom-add" class="btn btn-outline-primary btn-sm" type="button">Add / Update</button>
+                                    </div>
+                                    <div><span id="utility-rate">$0.00</span> / kWh</div>
+                                    <div id="utility-source" style="display:none;"><a id="utility-source-link" href="#" target="_blank">Source</a></div>
+                                </div>
+                                <div class="col-auto m-b-10">
+                                    <h6 class="mb-1">Estimated Weekly Savings</h6>
+                                    <div><span id="weekly-savings">$0.00</span></div>
+                                </div>
+                            </div>
+                            <div class="row pb-2">
+                                <div class="col-auto m-b-10">
+                                    <h3 class="mb-1" id="weekly-energy">0.000 kWh</h3>
                                     <span>Total Energy Produced This Week</span>
                                 </div>
                                 <div class="col-auto m-b-10">
-                                    <h3 class="mb-1">26.8 kWh</h3>
+                                    <h3 class="mb-1" id="avg-daily-energy">0.000 kWh</h3>
                                     <span>Average Produced per Day</span>
                                 </div>
                             </div>

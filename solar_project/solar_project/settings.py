@@ -152,3 +152,8 @@ CORS_ALLOWED_ORIGINS = [
 STATICFILES_DIRS = (
     os.path.join(CORE_DIR, 'dashboard/static'),
 )
+
+
+UTILITY_KWH_RATE_USD = float(os.getenv("UTILITY_KWH_RATE_USD", "0.15"))
+UTILITY_EIA_API_KEY = os.getenv("UTILITY_EIA_API_KEY")
+UTILITY_EIA_STATE = os.getenv("UTILITY_EIA_STATE")
