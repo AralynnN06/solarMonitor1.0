@@ -36,103 +36,67 @@
                     <div class="card flat-card">
                     </div>
                     <div class="row">
-                        <!-- <div class="col-md-6">
-                            <div class="card support-bar overflow-hidden">
-                                <div class="card-body pb-0">
-                                    <h2 class="m-0">88.94%</h2>
-                                    <span class="text-primary">Efficiency Rate</span>
-                                </div>
-                                <div id="support-chart"></div>
-                                <div class="card-footer border-0 bg-primary text-white background-pattern-white">
-                                    <div class="row text-center">
-                                        <div class="col">
-                                            <h4 class="m-0 text-white">80.4 %</h4>
-                                            <span>2024</span>
-                                        </div>
-                                        <div class="col">
-                                            <h4 class="m-0 text-white">88.2%</h4>
-                                            <span>2025</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- <div class="col-md-6">
-                            <div class="card support-bar overflow-hidden">
-                                <div class="card-body pb-0">
-                                    <h2 class="m-0">1432</h2>
-                                    <p class="mb-3 mt-3">Total Energy Used This Week.</p>
-                                </div>
-                                <div class="card-footer border-0">
-                                    <div class="row text-center">
-                                        <div class="col">
-                                            <h4 class="m-0">20 kW</h4>
-                                            <span>Monday</span>
-                                        </div>
-                                        <div class="col">
-                                            <h4 class="m-0">28 kW</h4>
-                                            <span>Tuesday</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="support-chart1"></div>
-                            </div>
-                        </div> -->
 
-                        <!-- <div class="col-sm-6">
+                        <!-- Battery State of Charge Widget -->
+                        <div class="col-sm-6">
                             <div class="card prod-p-card background-pattern">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-0">
                                         <div class="col">
-                                            <h6 class="m-b-5">Battery Charge Level</h6>
-                                            <h3 class="m-b-0">89%</h3>
+                                            <h6 class="m-b-5">Battery State of Charge</h6>
+                                            <h3 class="m-b-0">89%</h3> 
+                                            <!-- arbitrary data -->
+                                            <!-- <span class="text-success"><small>Charging from solar</small></span> -->
                                         </div>
                                         <div class="col-auto">
-                                            <i class="material-icons-two-tone text-primary">card_giftcard</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        
-                        <!-- <div class="col-sm-6">
-                            <div class="card prod-p-card bg-primary background-pattern-white">
-                                <div class="card-body">
-                                    <div class="row align-items-center m-b-0">
-                                        <div class="col">
-                                            <h4 class="m-b-5 text-white">Cloudiness Index</h4>
-                                            <h6 class="m-b-5 text-white">Clear sky, 1 = Overcast</h6>
+                                            <i class="material-icons-two-tone text-primary">battery_charging_full</i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                         <div class="col-sm-6">
-                            <div class="card prod-p-card background-pattern">
+                        <!-- Battery Health / Context Widget -->
+                        <div class="col-sm-6">
+                            <div class="card prod-p-card bg-primary background-pattern-white">
                                 <div class="card-body">
                                     <div class="row align-items-center m-b-0">
                                         <div class="col">
-                                            <h6 class="m-b-5">Inverter 1 Efficiency</h6>
-                                            <h3 class="m-b-0">95%</h3>
+                                            <h6 class="m-b-5 text-white">What is State of Charge?</h6>
+                                            <p class="m-b-0 text-white" style="font-size:0.82rem; line-height:1.4;">
+                                                State of Charge (SOC) is the percentage of energy remaining in your battery — like a fuel gauge. 
+                                                <strong>100%</strong> is fully charged. Most systems avoid dropping below <strong>20%</strong> to protect battery lifespan.
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
-                        <!-- <div class="col-sm-6">
-                            <div class="card prod-p-card background-pattern">
+                        <!-- SOC Range Guide -->
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Battery SOC Range Guide</h5>
+                                    <p>What your battery level means for your home's energy independence.</p>
+                                </div>
                                 <div class="card-body">
-                                    <div class="row align-items-center m-b-0">
-                                        <div class="col">
-                                            <h6 class="m-b-5">Inverter 2 Efficiency</h6>
-                                            <h3 class="m-b-0">96%</h3>
-                                        </div>
-                                    </div>
+                                    <dl class="dl-horizontal row mb-0">
+                                        <dt class="col-sm-3"><span class="text-success">80% – 100%</span></dt>
+                                        <dd class="col-sm-9">Fully or near-fully charged. Your system is storing surplus solar energy. You are operating at maximum energy independence.</dd>
+
+                                        <dt class="col-sm-3"><span class="text-primary">50% – 79%</span></dt>
+                                        <dd class="col-sm-9">Good charge level. Your battery can cover several hours of typical home load without any solar input or grid assistance.</dd>
+
+                                        <dt class="col-sm-3"><span class="text-warning">20% – 49%</span></dt>
+                                        <dd class="col-sm-9">Moderate reserve. Your system may begin drawing from the grid depending on your settings. Expect replenishment once the sun rises.</dd>
+
+                                        <dt class="col-sm-3"><span class="text-danger">Below 20%</span></dt>
+                                        <dd class="col-sm-9">Low reserve. Most battery systems set this as the minimum discharge limit to protect long-term battery health. Grid import is likely active.</dd>
+                                    </dl>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
                     </div>
                 </div>
@@ -190,12 +154,6 @@
                             <h6>ESP32 Output (Live Sensor Data)</h6>
                             <p>{{ latest_text }}</p>
                             <div class="col-12 col-md-6 mb-3" id="sensor-panels"></div>
-                            <!-- <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="ingest.html">ESP32 Ingest (From ESP32 to Webapp)</a></li>
-                            </ul>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="latest.html">I Guess temporary data</a></li>
-                            </ul> -->
                             <script>
                             const sensors = {{ sensors|safe }};
 
@@ -258,8 +216,8 @@
                 
                 <style>
                 .send-btn {
-                    padding: 4px 10px;   /* controls internal spacing */
-                    width: 60px;         /* force a fixed width */
+                    padding: 4px 10px;
+                    width: 60px;
                     font-size: 14px;
                 }
                 </style>
@@ -274,7 +232,6 @@
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
-                                    // include this if you’re using Django CSRF protection:
                                     "X-CSRFToken": getCookie("csrftoken"),
                                 },
                                 body: JSON.stringify({ message: message }),
@@ -298,7 +255,6 @@
                         }
                     }
 
-                    // helper for CSRF if needed (Django templates):
                     function getCookie(name) {
                         let cookieValue = null;
                         if (document.cookie && document.cookie !== "") {
